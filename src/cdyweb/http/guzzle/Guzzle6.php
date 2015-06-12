@@ -4,6 +4,7 @@ namespace cdyweb\http\guzzle;
 
 use cdyweb\http\Adapter;
 use cdyweb\http\BaseAdapter;
+use cdyweb\http\Exception\RequestException;
 use GuzzleHttp\Handler\CurlHandler;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
@@ -59,6 +60,7 @@ class Guzzle6 extends BaseAdapter {
     /**
      * @param RequestInterface $request
      * @return ResponseInterface
+     * @throws RequestException
      */
     public function send($request)
     {
@@ -71,7 +73,11 @@ class Guzzle6 extends BaseAdapter {
         $opt = [];
         if (!empty($this->basicAuth)) $opt['auth'] = $this->basicAuth;
 
-        return $this->getClient()->send($request, $opt);
+        try {
+            return $this->getClient()->send($request, $opt);
+        } catch (\GuzzleHttp\Exception\RequestException $ex) {
+            throw new RequestException($ex->getMessage(), $ex->getRequest(), $ex->getResponse(), $ex);
+        }
     }
 
     public function setBasicAuth($user, $pass)

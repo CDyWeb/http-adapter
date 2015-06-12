@@ -90,4 +90,9 @@ class cdyweb_http_Guzzle6Test extends PHPUnit_Framework_TestCase {
         $this->assertEquals(205, $result->getStatusCode());
     }
 
+    public function test_exception() {
+        $this->setExpectedException('\cdyweb\http\Exception\RequestException');
+        $this->adapter->get('°foo://barrrrrrrrr');
+    }
+
 }

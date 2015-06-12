@@ -3,6 +3,7 @@
 namespace cdyweb\http\guzzle;
 
 use cdyweb\http\BaseAdapter;
+use cdyweb\http\Exception\RequestException;
 use cdyweb\http\psr\Request;
 use cdyweb\http\psr\Response;
 use GuzzleHttp\Stream\Stream;
@@ -71,8 +72,19 @@ class Guzzle5 extends BaseAdapter
             $opt
         );
 
-        $response = $this->getClient()->send($g5request);
-        return new Response($response->getStatusCode(), $response->getHeaders(), $response->getBody());
+        try {
+            $response = $this->getClient()->send($g5request);
+            return new Response($response->getStatusCode(), $response->getHeaders(), $response->getBody());
+        } catch (\GuzzleHttp\Exception\RequestException $ex) {
+            $ex_request = $ex->getRequest();
+            $ex_response = $ex->getResponse();
+            throw new RequestException(
+                $ex->getMessage(),
+                $ex_request?new Request($ex_request->getMethod(), $ex_request->getUrl(), $ex_request->getHeaders(), $ex_request->getBody()) : null,
+                $ex_response?new Response($ex_response->getStatusCode(), $ex_response->getHeaders(), $ex_response->getBody()) : null,
+                $ex
+            );
+        }
     }
 
     public function setBasicAuth($user, $pass)

@@ -90,4 +90,14 @@ class cdyweb_http_Guzzle3Test extends PHPUnit_Framework_TestCase {
         $this->assertEquals(205, $result->getStatusCode());
     }
 
+    public function test_exception()
+    {
+        $this->setExpectedException('\cdyweb\http\Exception\RequestException');
+        $this->adapter->get('°foo://barrrrrrrrr');
+    }
+    public function test_BadResponseException() {
+        $this->setExpectedException('\cdyweb\http\Exception\RequestException');
+        $this->adapter->get('http://google.com/a/b/c/404');
+    }
+
 }

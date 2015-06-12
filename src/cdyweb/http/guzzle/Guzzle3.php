@@ -3,6 +3,7 @@
 namespace cdyweb\http\guzzle;
 
 use cdyweb\http\BaseAdapter;
+use cdyweb\http\Exception\RequestException;
 use cdyweb\http\psr\Request;
 use cdyweb\http\psr\Response;
 use Guzzle\Plugin\Mock\MockPlugin;
@@ -53,12 +54,32 @@ class Guzzle3 extends BaseAdapter
         $headers = $request->getHeaders();
         if (!empty($this->append_headers)) $headers = array_merge($headers, $this->append_headers);
 
-        $response = $this->getClient()->createRequest(
-            $request->getMethod(),
-            $request->getUri(),
-            $headers,
-            $request->getBody()
-        )->send();
+        try {
+            $g3request = $this->getClient()->createRequest(
+                $request->getMethod(),
+                $request->getUri(),
+                $headers,
+                $request->getBody()
+            );
+            $response = $g3request->send();
+        } catch (\Guzzle\Http\Exception\BadResponseException $ex) {
+            $ex_request = $ex->getRequest();
+            $ex_response = $ex->getResponse();
+            throw new RequestException(
+                $ex->getMessage(),
+                $ex_request?new Request($ex_request->getMethod(), $ex_request->getUrl(), $ex_request->getHeaders()->toArray(), $request->getBody()) : null,
+                $ex_response?new Response($ex_response->getStatusCode(), $ex_response->getHeaders()->toArray(), $ex_response->getBody()) : null,
+                $ex
+            );
+        } catch (\Guzzle\Http\Exception\RequestException $ex) {
+            $ex_request = $ex->getRequest();
+            throw new RequestException(
+                $ex->getMessage(),
+                $ex_request?new Request($ex_request->getMethod(), $ex_request->getUrl(), $ex_request->getHeaders()->toArray(), $request->getBody()) : null,
+                null,
+                $ex
+            );
+        }
 
         return new Response($response->getStatusCode(), $response->getHeaderLines(), $response->getBody());
     }

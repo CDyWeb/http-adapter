@@ -2,6 +2,7 @@
 
 namespace cdyweb\http;
 
+use cdyweb\http\Exception\RequestException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -12,6 +13,7 @@ interface Adapter {
      * @param array $headers
      * @param array $options
      * @return ResponseInterface
+     * @throws RequestException
      */
     public function get($uri = null, array $headers = array(), $options = array());
     /**
@@ -19,6 +21,7 @@ interface Adapter {
      * @param array $headers
      * @param array $options
      * @return ResponseInterface
+     * @throws RequestException
      */
     public function head($uri = null, array $headers = array(), array $options = array());
     /**
@@ -26,6 +29,7 @@ interface Adapter {
      * @param array $headers
      * @param array $options
      * @return ResponseInterface
+     * @throws RequestException
      */
     public function delete($uri = null, array $headers = array(), $body = null, array $options = array());
     /**
@@ -33,6 +37,7 @@ interface Adapter {
      * @param array $headers
      * @param array $options
      * @return ResponseInterface
+     * @throws RequestException
      */
     public function put($uri = null, array $headers = array(), $body = null, array $options = array());
     /**
@@ -40,6 +45,7 @@ interface Adapter {
      * @param array $headers
      * @param array $options
      * @return ResponseInterface
+     * @throws RequestException
      */
     public function patch($uri = null, array $headers = array(), $body = null, array $options = array());
     /**
@@ -47,12 +53,14 @@ interface Adapter {
      * @param array $headers
      * @param array $options
      * @return ResponseInterface
+     * @throws RequestException
      */
     public function post($uri = null, array $headers = array(), $postBody = null, array $options = array());
     /**
      * @param string $uri
      * @param array $options
      * @return ResponseInterface
+     * @throws RequestException
      */
     public function options($uri = null, array $options = array());
 
@@ -69,6 +77,7 @@ interface Adapter {
     /**
      * @param RequestInterface $request
      * @return ResponseInterface
+     * @throws RequestException
      */
     public function send($request);
 
