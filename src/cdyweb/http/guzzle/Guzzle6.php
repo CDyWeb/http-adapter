@@ -36,9 +36,9 @@ class Guzzle6 extends BaseAdapter {
      */
     public function getClient() {
         if (empty($this->client)) {
-            $stack = new HandlerStack();
-            $stack->setHandler($this->getHandler());
-            $opt=['verify'=>false, 'handler'=>$stack];
+            #$stack = new HandlerStack();
+            #$stack->setHandler($this->getHandler());
+            $opt=['verify'=>false]; //, 'handler'=>$stack];
             $this->client = new \GuzzleHttp\Client($opt);
         }
         return $this->client;
