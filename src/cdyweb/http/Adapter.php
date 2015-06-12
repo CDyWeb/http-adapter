@@ -78,6 +78,16 @@ interface Adapter {
     public function appendRequestHeaders($headers);
 
     /**
+     * @param array $header
+     */
+    public function appendRequestHeader($name, $value);
+
+    /**
+     * @return array
+     */
+    public function getRequestHeaders();
+
+    /**
      * @return mixed
      */
     public function getClient();

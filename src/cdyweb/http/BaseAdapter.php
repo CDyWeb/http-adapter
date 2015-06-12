@@ -23,6 +23,20 @@ abstract class BaseAdapter implements Adapter {
     }
 
     /**
+     * @param array $header
+     */
+    public function appendRequestHeader($name, $value) {
+        $this->append_headers[$name] = $value;
+    }
+
+    /**
+     * @return array
+     */
+    public function getRequestHeaders() {
+        return $this->append_headers;
+    }
+
+    /**
      * @param string $uri
      * @param array $headers
      * @param array $options
