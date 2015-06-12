@@ -52,7 +52,7 @@ abstract class BaseAdapter implements Adapter {
      */
     public function delete($uri = null, array $headers = array(), $body = null, array $options = array())
     {
-        return $this->send($this->createRequest('DELETE', $uri, $headers, null, $options));
+        return $this->send($this->createRequest('DELETE', $uri, $headers, $body, $options));
     }
 
     /**
@@ -63,7 +63,7 @@ abstract class BaseAdapter implements Adapter {
      */
     public function put($uri = null, array $headers = array(), $body = null, array $options = array())
     {
-        return $this->send($this->createRequest('PUT', $uri, $headers, null, $options));
+        return $this->send($this->createRequest('PUT', $uri, $headers, $body, $options));
     }
 
     /**
@@ -74,18 +74,23 @@ abstract class BaseAdapter implements Adapter {
      */
     public function patch($uri = null, array $headers = array(), $body = null, array $options = array())
     {
-        return $this->send($this->createRequest('PATCH', $uri, $headers, null, $options));
+        return $this->send($this->createRequest('PATCH', $uri, $headers, $body, $options));
     }
 
     /**
-     * @param string $uri
+     * @param null $uri
      * @param array $headers
+     * @param mixed $postBody
      * @param array $options
      * @return ResponseInterface
      */
     public function post($uri = null, array $headers = array(), $postBody = null, array $options = array())
     {
-        return $this->send($this->createRequest('POST', $uri, $headers, null, $options));
+        if (is_array($postBody)) {
+            $postBody = http_build_query($postBody);
+            $headers['Content-Type'] = 'application/x-www-form-urlencoded';
+        }
+        return $this->send($this->createRequest('POST', $uri, $headers, $postBody, $options));
     }
 
     /**

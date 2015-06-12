@@ -48,12 +48,25 @@ class cdyweb_http_Guzzle3Test extends PHPUnit_Framework_TestCase {
         $this->assertEquals('Basic Zm9vOmJhcg==', $request->getHeader('Authorization'));
     }
 
-    public function test_methods() {
-        $mock = $this->adapter->mock([[200],[201],[202],[203],[204],[205]]);
-
-        $result = $this->adapter->post('http://c:d@example.com/?a!');
+    public function test_post() {
+        /**
+         * @var \Guzzle\Plugin\Mock\MockPlugin $mock
+         * @var \Guzzle\Http\Message\EntityEnclosingRequest $request
+         */
+        $mock = $this->adapter->mock([[200]]);
+        $result = $this->adapter->post('http://c:d@example.com/?a!', array(), array('aaa'=>'bbb','ccc'=>'ddd'));
         $this->assertInstanceOf('\Psr\Http\Message\ResponseInterface', $result);
-        $this->assertEquals(200, $result->getStatusCode());
+
+        $arr = $mock->getReceivedRequests();
+        $request = end($arr);
+        $this->assertInstanceOf('\Guzzle\Http\Message\EntityEnclosingRequest',$request);
+        $body = (string) $request->getBody();
+        $this->assertEquals('aaa=bbb&ccc=ddd', $body);
+        $this->assertEquals('application/x-www-form-urlencoded', $request->getHeader('Content-Type'));
+    }
+
+    public function test_methods() {
+        $mock = $this->adapter->mock([[201],[202],[203],[204],[205]]);
 
         $result = $this->adapter->put('http://c:d@example.com/?a!');
         $this->assertInstanceOf('\Psr\Http\Message\ResponseInterface', $result);

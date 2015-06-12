@@ -45,12 +45,24 @@ class cdyweb_http_Guzzle5Test extends PHPUnit_Framework_TestCase {
         $this->assertEquals('Basic Zm9vOmJhcg==', $request->getHeader('Authorization'));
     }
 
-    public function test_methods() {
-        $mock = $this->adapter->mock([[200],[201],[202],[203],[204],[205]]);
-
-        $result = $this->adapter->post('http://c:d@example.com/?a!');
+    public function test_post() {
+        /**
+         * @var GuzzleHttp\Subscriber\History $mock
+         * @var \GuzzleHttp\Message\Request $request
+         */
+        $mock = $this->adapter->mock([[200]]);
+        $result = $this->adapter->post('http://c:d@example.com/?a!', array(), array('aaa'=>'bbb','ccc'=>'ddd'));
         $this->assertInstanceOf('\Psr\Http\Message\ResponseInterface', $result);
-        $this->assertEquals(200, $result->getStatusCode());
+
+        $request = $mock->getLastRequest();
+        $this->assertInstanceOf('\GuzzleHttp\Message\Request',$request);
+        $body = (string) $request->getBody();
+        $this->assertEquals('aaa=bbb&ccc=ddd', $body);
+        $this->assertEquals('application/x-www-form-urlencoded', $request->getHeader('Content-Type'));
+    }
+
+    public function test_methods() {
+        $mock = $this->adapter->mock([[201],[202],[203],[204],[205]]);
 
         $result = $this->adapter->put('http://c:d@example.com/?a!');
         $this->assertInstanceOf('\Psr\Http\Message\ResponseInterface', $result);
