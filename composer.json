@@ -1,0 +1,29 @@
+{
+  "name": "cdyweb/http-adapter",
+  "description": "http adapter",
+  "keywords": ["http"],
+  "homepage": "https://github.com/CDyWeb",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Erwin Kooi",
+      "homepage": "http://cdyweb.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=5.3",
+    "ext-curl": "*",
+    "ext-json": "*",
+    "psr/http-message": "~1.0",
+  },
+  "require-dev": {
+    "phpunit/phpunit": "4.1.*"
+  },
+  "autoload": {
+    "psr-0": {
+      "cdyweb\\http": "src/"
+    }
+  },
+  "minimum-stability": "dev"
+}
