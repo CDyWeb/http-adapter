@@ -26,6 +26,11 @@ class Guzzle6 extends BaseAdapter {
     protected $handler;
 
     /**
+     * @var array
+     */
+    private $basicAuth = null;
+
+    /**
      * @return \GuzzleHttp\Client
      */
     public function getClient() {
@@ -62,7 +67,16 @@ class Guzzle6 extends BaseAdapter {
                 $request = $request->withHeader($name, $value);
             }
         }
-        return $this->getClient()->send($request);
+
+        $opt = [];
+        if (!empty($this->basicAuth)) $opt['auth'] = $this->basicAuth;
+
+        return $this->getClient()->send($request, $opt);
+    }
+
+    public function setBasicAuth($user, $pass)
+    {
+        $this->basicAuth = [$user, $pass];
     }
 
     public function mock(array $responses) {

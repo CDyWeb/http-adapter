@@ -36,11 +36,13 @@ class cdyweb_http_Guzzle5Test extends PHPUnit_Framework_TestCase {
         $this->assertEquals('yyy', $request->getHeader('xxx'));
 
         $this->adapter->appendRequestHeaders(null);
+        $this->adapter->setBasicAuth('foo','bar');
         $this->adapter->get('http://www.example.com/?321');
         $request = $mock->getLastRequest();
         $this->assertInstanceOf('\GuzzleHttp\Message\Request',$request);
         $this->assertEquals('http://www.example.com/?321', $request->getUrl());
         $this->assertEquals(null, $request->getHeader('xxx'));
+        $this->assertEquals('Basic Zm9vOmJhcg==', $request->getHeader('Authorization'));
     }
 
     public function test_methods() {

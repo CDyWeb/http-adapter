@@ -38,12 +38,14 @@ class cdyweb_http_Guzzle3Test extends PHPUnit_Framework_TestCase {
         $this->assertEquals('yyy', $request->getHeader('xxx'));
 
         $this->adapter->appendRequestHeaders(null);
+        $this->adapter->setBasicAuth('foo','bar');
         $this->adapter->get('http://www.example.com/?321');
         $arr = $mock->getReceivedRequests();
         $request = end($arr);
         $this->assertInstanceOf('\Guzzle\Http\Message\Request',$request);
         $this->assertEquals('http://www.example.com/?321', $request->getUrl());
         $this->assertEquals(null, $request->getHeader('xxx'));
+        $this->assertEquals('Basic Zm9vOmJhcg==', $request->getHeader('Authorization'));
     }
 
     public function test_methods() {

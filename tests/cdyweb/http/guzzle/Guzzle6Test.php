@@ -36,11 +36,13 @@ class cdyweb_http_Guzzle6Test extends PHPUnit_Framework_TestCase {
         $this->assertEquals('yyy', $request->getHeaderLine('xxx'));
 
         $this->adapter->appendRequestHeaders(null);
+        $this->adapter->setBasicAuth('foo','bar');
         $this->adapter->get('http://www.example.com/?321');
         $request = $mock->getLastRequest();
         $this->assertInstanceOf('\Psr\Http\Message\RequestInterface',$request);
         $this->assertEquals('http://www.example.com/?321', $request->getUri());
         $this->assertEquals(null, $request->getHeaderLine('xxx'));
+        $this->assertEquals('Basic Zm9vOmJhcg==', $request->getHeaderLine('Authorization'));
     }
 
     public function test_methods() {

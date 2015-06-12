@@ -6,6 +6,7 @@ use cdyweb\http\BaseAdapter;
 use cdyweb\http\psr\Request;
 use cdyweb\http\psr\Response;
 use Guzzle\Plugin\Mock\MockPlugin;
+use Guzzle\Plugin\CurlAuth\CurlAuthPlugin;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -74,5 +75,9 @@ class Guzzle3 extends BaseAdapter
         }
         $this->getClient()->addSubscriber($plugin);
         return $plugin;
+    }
+
+    public function setBasicAuth($user, $pass) {
+        $this->getClient()->addSubscriber(new CurlAuthPlugin($user, $pass));
     }
 }

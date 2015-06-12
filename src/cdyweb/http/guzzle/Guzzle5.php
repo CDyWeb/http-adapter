@@ -20,6 +20,11 @@ class Guzzle5 extends BaseAdapter
     protected $client;
 
     /**
+     * @var array
+     */
+    private $basicAuth = null;
+
+    /**
      * @return \GuzzleHttp\Client
      */
     public function getClient() {
@@ -51,22 +56,29 @@ class Guzzle5 extends BaseAdapter
         /**
          * var \GuzzleHttp\Message\Response $response
          */
-        $g5request = $this->getClient()->createRequest(
-            $request->getMethod(),
-            $request->getUri()
-        );
-
-        $body = $request->getBody();
-        if ($body !== null) $g5request->setBody(Stream::factory($body));
-
         $headers = $request->getHeaders();
         if (!empty($this->append_headers)) $headers = array_merge($headers, $this->append_headers);
-        if (!empty($headers)) $g5request->setHeaders($headers);
+
+        $opt = [];
+        if (!empty($this->basicAuth)) $opt['auth'] = $this->basicAuth;
+        if (!empty($headers)) $opt['headers'] = $headers;
+        $body = $request->getBody();
+        if ($body !== null) $opt['body'] = $body;
+
+        $g5request = $this->getClient()->createRequest(
+            $request->getMethod(),
+            $request->getUri(),
+            $opt
+        );
 
         $response = $this->getClient()->send($g5request);
         return new Response($response->getStatusCode(), $response->getHeaders(), $response->getBody());
     }
 
+    public function setBasicAuth($user, $pass)
+    {
+        $this->basicAuth = [$user, $pass];
+    }
 
     public function mock(array $responses) {
         $arr = [];

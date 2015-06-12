@@ -77,7 +77,16 @@ interface Adapter {
      */
     public function appendRequestHeaders($headers);
 
+    /**
+     * @return mixed
+     */
     public function getClient();
+
+    /**
+     * @param $user
+     * @param $pass
+     */
+    public function setBasicAuth($user, $pass);
 
     public function mock(array $responses);
 }
