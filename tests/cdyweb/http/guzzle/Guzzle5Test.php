@@ -7,10 +7,11 @@
 class cdyweb_http_Guzzle5Test extends PHPUnit_Framework_TestCase {
 
     public function setUp() {
-        $this->adapter = new \cdyweb\http\guzzle\Guzzle5();
+        $this->adapter = \cdyweb\http\guzzle\Guzzle::getAdapter();
     }
 
     public function test_getClient() {
+        $this->assertInstanceOf('\cdyweb\http\guzzle\Guzzle5',$this->adapter);
         $client = $this->adapter->getClient();
         $this->assertInstanceOf('\GuzzleHttp\Client',$client);
     }

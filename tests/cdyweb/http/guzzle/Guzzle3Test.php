@@ -7,10 +7,11 @@
 class cdyweb_http_Guzzle3Test extends PHPUnit_Framework_TestCase {
 
     public function setUp() {
-        $this->adapter = new \cdyweb\http\guzzle\Guzzle3();
+        $this->adapter = \cdyweb\http\guzzle\Guzzle::getAdapter();
     }
 
     public function test_getClient() {
+        $this->assertInstanceOf('\cdyweb\http\guzzle\Guzzle3',$this->adapter);
         $client = $this->adapter->getClient();
         $this->assertInstanceOf('\Guzzle\Http\Client',$client);
     }
