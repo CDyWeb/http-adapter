@@ -144,7 +144,7 @@ class Request extends Message implements RequestInterface
             $host .= ':' . $port;
         }
 
-        $this->headerLines = ['Host' => [$host]] + $this->headerLines;
-        $this->headers = ['host' => [$host]] + $this->headers;
+        $this->headerLines = array('Host' => array($host)) + $this->headerLines;
+        $this->headers = array('host' => array($host)) + $this->headers;
     }
 }

@@ -13,7 +13,7 @@ class Response extends Message implements ResponseInterface
 {
 
     /** @var array Map of standard HTTP status code/reason phrases */
-    private static $phrases = [
+    private static $phrases = array(
         100 => 'Continue',
         101 => 'Switching Protocols',
         102 => 'Processing',
@@ -71,7 +71,7 @@ class Response extends Message implements ResponseInterface
         507 => 'Insufficient Storage',
         508 => 'Loop Detected',
         511 => 'Network Authentication Required',
-    ];
+    );
 
     /** @var null|string */
     private $reasonPhrase = '';
@@ -88,7 +88,7 @@ class Response extends Message implements ResponseInterface
      */
     public function __construct(
         $status = 200,
-        array $headers = [],
+        array $headers = array(),
         $body = null,
         $version = '1.1',
         $reason = null

@@ -12,14 +12,14 @@ use Psr\Http\Message\UriInterface;
  */
 class Uri implements UriInterface
 {
-    private static $schemes = [
+    private static $schemes = array(
         'http'  => 80,
         'https' => 443,
-    ];
+    );
 
     private static $charUnreserved = 'a-zA-Z0-9_\-\.~';
     private static $charSubDelims = '!\$&\'\(\)\*\+,;=';
-    private static $replaceQuery = ['=' => '%3D', '&' => '%26'];
+    private static $replaceQuery = array('=' => '%3D', '&' => '%26');
 
     /** @var string Uri scheme. */
     private $scheme = '';
@@ -77,14 +77,14 @@ class Uri implements UriInterface
      */
     public static function removeDotSegments($path)
     {
-        static $noopPaths = ['' => true, '/' => true, '*' => true];
-        static $ignoreSegments = ['.' => true, '..' => true];
+        static $noopPaths = array('' => true, '/' => true, '*' => true);
+        static $ignoreSegments = array('.' => true, '..' => true);
 
         if (isset($noopPaths[$path])) {
             return $path;
         }
 
-        $results = [];
+        $results = array();
         $segments = explode('/', $path);
         foreach ($segments as $segment) {
             if ($segment == '..') {
@@ -125,23 +125,23 @@ class Uri implements UriInterface
         }
 
         if ($rel instanceof UriInterface) {
-            $relParts = [
+            $relParts = array(
                 'scheme'   => $rel->getScheme(),
                 'host'     => $rel->getHost(),
                 'port'     => $rel->getPort(),
                 'path'     => $rel->getPath(),
                 'query'    => $rel->getQuery(),
                 'fragment' => $rel->getFragment()
-            ];
+            );
         } else {
-            $relParts = parse_url($rel) + [
+            $relParts = parse_url($rel) + array(
                     'scheme'   => '',
                     'host'     => '',
                     'port'     => '',
                     'path'     => '',
                     'query'    => '',
                     'fragment' => ''
-                ];
+                );
         }
 
         if (!empty($relParts['scheme']) && !empty($relParts['host'])) {
@@ -150,14 +150,14 @@ class Uri implements UriInterface
                 : self::fromParts($relParts);
         }
 
-        $parts = [
+        $parts = array(
             'scheme'   => $base->getScheme(),
             'host'     => $base->getHost(),
             'port'     => $base->getPort(),
             'path'     => $base->getPath(),
             'query'    => $base->getQuery(),
             'fragment' => $base->getFragment()
-        ];
+        );
 
         if (!empty($relParts['host'])) {
             $parts['host'] = $relParts['host'];
@@ -209,9 +209,10 @@ class Uri implements UriInterface
             return $uri;
         }
 
-        $result = [];
+        $result = array();
         foreach (explode('&', $current) as $part) {
-            if (explode('=', $part)[0] !== $key) {
+            $arr = explode('=', $part);
+            if ($arr[0] !== $key) {
                 $result[] = $part;
             };
         }
@@ -239,11 +240,12 @@ class Uri implements UriInterface
         $key = strtr($key, self::$replaceQuery);
 
         if (!$current) {
-            $result = [];
+            $result = array();
         } else {
-            $result = [];
+            $result = array();
             foreach (explode('&', $current) as $part) {
-                if (explode('=', $part)[0] !== $key) {
+                $arr = explode('=', $part);
+                if ($arr[0] !== $key) {
                     $result[] = $part;
                 };
             }
