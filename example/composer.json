@@ -1,0 +1,6 @@
+{
+  "require": {
+    "cdyweb/http-adapter": "*",
+    "guzzlehttp/guzzle": "~6.0"
+  }
+}
