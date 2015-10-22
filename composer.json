@@ -24,6 +24,5 @@
     "psr-0": {
       "cdyweb\\http": "src/"
     }
-  },
-  "minimum-stability": "dev"
+  }
 }
